@@ -12,6 +12,9 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        thai: ['Kanit', 'Mitr', 'Inter', 'sans-serif'],  // เพิ่มฟอนต์ไทย
+      },
     },
   },
   plugins: [],
