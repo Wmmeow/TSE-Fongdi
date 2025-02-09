@@ -4,8 +4,13 @@ import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Loading from "@/app/UserPage/LoginPage/loading";
+import Link from "next/link";
 
-export default function ReportUser() {
+
+import { JSX } from "react";
+import Area from "@/app/components/Dropdown/area";
+
+export default function ReportUser() : JSX.Element {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [sessionExpired, setSessionExpired] = useState(false);
@@ -55,10 +60,26 @@ export default function ReportUser() {
   const seconds = secondsLeft % 60;
 
   return (
-    <div>
-      <h1>แจ้งปัญหา</h1>
-      <p>รหัสนักศึกษาของคุณ: {session?.user?.name}</p>
-      <p>เวลาที่เหลือในการใช้งาน: {minutesLeft} นาที {seconds} วินาที</p>
+<div className="max-w-3xl w-full mx-auto p-4 flex flex-col items-center">
+      <h2 className="text-2xl md:text-3xl font-bold text-center text-[#8C181C]">
+        ระบบแจ้งปัญหา
+      </h2>
+      <div className="w-full max-w-xl flex flex-col gap-4 bg-white p-6 rounded-lg shadow-md">
+        <Area />
+        <button className="w-full py-2 bg-[#FFD04F] text-black font-bold rounded hover:bg-yellow-500">
+          แจ้งปัญหา
+        </button>
+        <div className="mt-5 text-center">
+          <Link href="/" className="text-[#8C181C] hover:underline">
+            กลับไปหน้าแรก
+          </Link>
+        </div>
+      </div>
     </div>
+    // <div>
+    //   <h1>แจ้งปัญหา</h1>
+    //   <p>รหัสนักศึกษาของคุณ: {session?.user?.name}</p>
+    //   <p>เวลาที่เหลือในการใช้งาน: {minutesLeft} นาที {seconds} วินาที</p>
+    // </div>
   );
 }
