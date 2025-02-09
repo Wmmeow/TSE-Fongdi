@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import styles from './styles.module.css';
 
 export default function Login() {
@@ -19,41 +20,43 @@ export default function Login() {
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (value.length <= 20) {
+    if (value.length <= 13) {  
       setPassword(value);
     }
   };
 
   const validateForm = async (e: React.FormEvent) => {
     e.preventDefault();
-    let newErrors = { studentId: '', password: '' };
-
-    if (!/^\d{10}$/.test(studentId)) newErrors.studentId = 'รหัสนักศึกษาต้องเป็นตัวเลข 10 หลัก';
-    if (!/^\d{13}$/.test(password)) newErrors.password = 'รหัสผ่านต้องเป็นตัวเลข 13 หลัก';
-
+    let newErrors = { studentId: "", password: "" };
+  
+    if (!/^\d{10}$/.test(studentId)) newErrors.studentId = "รหัสนักศึกษาต้องเป็นตัวเลข 10 หลัก";
+    if (!/^\d{13}$/.test(password)) newErrors.password = "รหัสผ่านต้องเป็นตัวเลข 13 หลัก";
+  
     setErrors(newErrors);
-
+  
     if (!newErrors.studentId && !newErrors.password) {
       try {
-        const response = await fetch('/api/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ studentId, password }),
+        // ใช้ NextAuth.js สำหรับการเข้าสู่ระบบ
+        const result = await signIn("credentials", {
+          redirect: false,
+          studentId,
+          password,
         });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          const expiresAt = Date.now() + 5 * 60 * 1000; // หมดอายุใน 5 นาที
-          localStorage.setItem('studentId', studentId);
-          localStorage.setItem('expiresAt', expiresAt.toString());
-          router.push('/UserPage/ReportUser');
+  
+        if (result?.error) {
+          console.warn("เข้าสู่ระบบไม่สำเร็จ:", result.error); 
+          alert("เข้าสู่ระบบไม่สำเร็จ! กรุณาตรวจสอบรหัสผ่าน");
         } else {
-          alert(data.message);
+          // ให้เซสชันหมดอายุใน 5 นาที
+          const expiresAt = Date.now() + 5 * 60 * 1000;
+          localStorage.setItem("studentId", studentId);
+          localStorage.setItem("expiresAt", expiresAt.toString());
+  
+          router.push("/UserPage/ReportUser");
         }
       } catch (error) {
-        console.error('Error:', error);
-        alert('เกิดข้อผิดพลาด กรุณาลองใหม่');
+        console.error("เกิดข้อผิดพลาดระหว่างเข้าสู่ระบบ:", error);
+        alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
       }
     }
   };
@@ -100,5 +103,7 @@ export default function Login() {
         </form>
       </div>
     </main>
+    
+    
   );
 }
