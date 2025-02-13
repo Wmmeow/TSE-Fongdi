@@ -6,11 +6,10 @@ import { useEffect, useState } from "react";
 import Loading from "@/app/UserPage/LoginPage/loading";
 import Link from "next/link";
 
-
 import { JSX } from "react";
 import Area from "@/app/components/Dropdown/area";
 
-export default function ReportUser() : JSX.Element {
+export default function ReportUser(): JSX.Element {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [sessionExpired, setSessionExpired] = useState(false);
@@ -60,7 +59,11 @@ export default function ReportUser() : JSX.Element {
   const seconds = secondsLeft % 60;
 
   return (
-<div className="max-w-3xl w-full mx-auto p-4 flex flex-col items-center">
+    <div className="max-w-3xl w-full mx-auto p-4 flex flex-col items-center">
+      <p>รหัสนักศึกษาของคุณ: {session?.user?.name}</p>
+      <p>
+        เวลาที่เหลือในการใช้งาน: {minutesLeft} นาที {seconds} วินาที
+      </p>
       <h2 className="text-2xl md:text-3xl font-bold text-center text-[#8C181C]">
         ระบบแจ้งปัญหา
       </h2>
@@ -78,8 +81,8 @@ export default function ReportUser() : JSX.Element {
     </div>
     // <div>
     //   <h1>แจ้งปัญหา</h1>
-    //   <p>รหัสนักศึกษาของคุณ: {session?.user?.name}</p>
-    //   <p>เวลาที่เหลือในการใช้งาน: {minutesLeft} นาที {seconds} วินาที</p>
+    // <p>รหัสนักศึกษาของคุณ: {session?.user?.name}</p>
+    // <p>เวลาที่เหลือในการใช้งาน: {minutesLeft} นาที {seconds} วินาที</p>
     // </div>
   );
 }
