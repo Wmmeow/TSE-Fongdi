@@ -10,22 +10,21 @@ const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        // ตรวจสอบรหัสนักศึกษา (10 หลัก)
         if (!/^\d{10}$/.test(credentials?.studentId || "")) {
           throw new Error("รหัสนักศึกษาต้องเป็นตัวเลข 10 หลัก");
         }
 
-        // ตรวจสอบรหัสผ่านที่เป็นเลขบัตรประชาชน (13 หลัก)
-        if (!/^\d{13}$/.test(credentials?.password || "")) {
-          throw new Error("รหัสผ่านต้องเป็นตัวเลข 13 หลัก");
+        if (!/^Tse\d{5}$/.test(credentials?.password || "")) {
+          throw new Error("รหัสผ่านต้องอยู่ในรูปแบบ TseXXXXX");
         }
 
         const usersDB = [
-          { studentId: "1111111111", citizenId: "1234567890123", name: "Supisara Chaiwang" }
+          { studentId: "6500000000", citizenId: "12345", name: "Supisara Chaiwang" }
         ];
 
         const user = usersDB.find(
-          u => u.studentId === credentials?.studentId && u.citizenId === credentials?.password
+          u => u.studentId === credentials?.studentId &&
+               `Tse${u.citizenId}` === credentials?.password
         );
 
         if (user) {
@@ -38,9 +37,9 @@ const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: "jwt",
-    maxAge: 5 * 60,
+    maxAge: 10 * 60,
   },
-  secret: process.env.NEXTAUTH_SECRET, // เก็บค่าใน .env.local
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);

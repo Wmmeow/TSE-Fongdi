@@ -5,7 +5,7 @@ export const mockLocations = [
       name: "อาคาร A",
       floors: [
         {
-          id: "floor1",
+          id: "floor",
           name: "ชั้น 1",
           rooms: [
             { id: "room1", name: "ห้อง 101", issues: ["ไฟดับ", "น้ำรั่ว"] },
@@ -21,18 +21,33 @@ export const mockLocations = [
         },
       ],
     },
+
     {
       id: "zone2",
       name: "อาคาร B",
       floors: [
         {
-          id: "floor3",
+          id: "floor",
           name: "ชั้น 1",
           rooms: [
-            { id: "room4", name: "ห้อง 301", issues: ["ไฟกระพริบ", "พื้นลื่น"] },
+            { id: "room1", name: "ห้อง 301", issues: ["ไฟกระพริบ", "พื้นลื่น"] },
           ],
         },
       ],
     },
+
+    {
+        id: "zone3",
+        name: "ลานจอดรถวิศวะโยธา",
+        floors: [
+          {
+            id: "floor",
+            name: "ชั้น 1",
+            rooms: [
+              { id: "room1", name: "-", issues: ["ต้มไม้ล้ม", "จอดรถขวาง","กา"] },
+            ],
+          },
+        ],
+      },
   ];
   

@@ -1,63 +1,53 @@
 "use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
-import styles from './styles.module.css';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+import styles from "./styles.module.css";
 
 export default function Login() {
-  const [studentId, setStudentId] = useState('');
-  const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState({ studentId: '', password: '' });
+  const [studentId, setStudentId] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleStudentIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (/^\d*$/.test(value) && value.length <= 10) {
+    if (value.length <= 10) { 
       setStudentId(value);
     }
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (value.length <= 13) {  
+    if (value.length <= 8) { 
       setPassword(value);
     }
   };
 
-  const validateForm = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    let newErrors = { studentId: "", password: "" };
-  
-    if (!/^\d{10}$/.test(studentId)) newErrors.studentId = "รหัสนักศึกษาต้องเป็นตัวเลข 10 หลัก";
-    if (!/^\d{13}$/.test(password)) newErrors.password = "รหัสผ่านต้องเป็นตัวเลข 13 หลัก";
-  
-    setErrors(newErrors);
-  
-    if (!newErrors.studentId && !newErrors.password) {
-      try {
-        // ใช้ NextAuth.js สำหรับการเข้าสู่ระบบ
-        const result = await signIn("credentials", {
-          redirect: false,
-          studentId,
-          password,
-        });
-  
-        if (result?.error) {
-          console.warn("เข้าสู่ระบบไม่สำเร็จ:", result.error); 
-          alert("เข้าสู่ระบบไม่สำเร็จ! กรุณาตรวจสอบรหัสผ่าน");
-        } else {
-          // ให้เซสชันหมดอายุใน 5 นาที
-          const expiresAt = Date.now() + 5 * 60 * 1000;
-          localStorage.setItem("studentId", studentId);
-          localStorage.setItem("expiresAt", expiresAt.toString());
-  
-          router.push("/UserPage/ReportUser");
-        }
-      } catch (error) {
-        console.error("เกิดข้อผิดพลาดระหว่างเข้าสู่ระบบ:", error);
-        alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
+    setError(""); // รีเซ็ต error ก่อนส่งข้อมูล
+
+    try {
+      const result = await signIn("credentials", {
+        redirect: false,
+        studentId,
+        password,
+      });
+
+      if (result?.error) {
+        setError("เข้าสู่ระบบไม่สำเร็จ! กรุณาตรวจสอบรหัสผ่าน");
+      } else {
+        // ตั้งค่าหมดอายุ session
+        const expiresAt = Date.now() + 10 * 60 * 1000;
+        localStorage.setItem("studentId", studentId);
+        localStorage.setItem("expiresAt", expiresAt.toString());
+
+        router.push("/UserPage/ReportUser");
       }
+    } catch (error) {
+      setError("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
     }
   };
 
@@ -65,7 +55,7 @@ export default function Login() {
     <main className={`${styles.main} flex items-center justify-center min-h-screen p-4`}>
       <div className="w-screen max-w-lg md:max-w-3xl lg:max-w-4xl p-8 text-white -mt-14">
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-12">TSE Login</h1>
-        <form onSubmit={validateForm}>
+        <form onSubmit={handleSubmit}>
           <div className="mb-8">
             <label className="block text-sm md:text-base lg:text-lg mb-1" htmlFor="student-id">
               รหัสนักศึกษา
@@ -75,9 +65,8 @@ export default function Login() {
               type="text"
               value={studentId}
               onChange={handleStudentIdChange}
-              className={`w-full px-4 py-3 md:px-5 md:py-4 lg:px-6 lg:py-5 border rounded-md text-black text-base md:text-lg lg:text-xl focus:ring-2 focus:ring-[#3abaf5] outline-none ${errors.studentId ? 'border-red-500' : ''}`}
+              className="w-full px-4 py-3 md:px-5 md:py-4 lg:px-6 lg:py-5 border rounded-md text-black text-base md:text-lg lg:text-xl focus:ring-2 focus:ring-[#3abaf5] outline-none"
             />
-            {errors.studentId && <p className="text-red-400 text-sm mt-1">{errors.studentId}</p>}
           </div>
 
           <div className="mb-12">
@@ -89,10 +78,11 @@ export default function Login() {
               type="password"
               value={password}
               onChange={handlePasswordChange}
-              className={`w-full px-4 py-3 md:px-5 md:py-4 lg:px-6 lg:py-5 border rounded-md text-black text-base md:text-lg lg:text-xl focus:ring-2 focus:ring-[#3abaf5] outline-none ${errors.password ? 'border-red-500' : ''}`}
+              className="w-full px-4 py-3 md:px-5 md:py-4 lg:px-6 lg:py-5 border rounded-md text-black text-base md:text-lg lg:text-xl focus:ring-2 focus:ring-[#3abaf5] outline-none"
             />
-            {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password}</p>}
           </div>
+
+          {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
 
           <button
             type="submit"
@@ -103,7 +93,5 @@ export default function Login() {
         </form>
       </div>
     </main>
-    
-    
   );
 }
