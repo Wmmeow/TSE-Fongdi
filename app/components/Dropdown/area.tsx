@@ -28,13 +28,18 @@ export default function Area(): JSX.Element {
   const [selectedIssue, setSelectedIssue] = useState<string>("");
 
   const zones: Zone[] = mockLocations;
-  const floors: Floor[] = zones.find((zone) => zone.id === selectedZone)?.floors || [];
-  const rooms: Room[] = floors.find((floor) => floor.id === selectedFloor)?.rooms || [];
-  const issues: string[] = rooms.find((room) => room.id === selectedRoom)?.issues || [];
+  const floors: Floor[] =
+    zones.find((zone) => zone.id === selectedZone)?.floors || [];
+  const rooms: Room[] =
+    floors.find((floor) => floor.id === selectedFloor)?.rooms || [];
+  const issues: string[] =
+    rooms.find((room) => room.id === selectedRoom)?.issues || [];
 
   return (
     <div>
-      <label className="block text-[#8C181C] font-semibold">เลือกพื้นที่:</label>
+      <label className="block text-[#8C181C] font-semibold">
+        เลือกพื้นที่:
+      </label>
       <select
         className="w-full p-2 border rounded text-black"
         value={selectedZone}
@@ -47,11 +52,13 @@ export default function Area(): JSX.Element {
       >
         <option value="">-- เลือกพื้นที่ --</option>
         {zones.map((zone) => (
-          <option key={zone.id} value={zone.id}>{zone.name}</option>
+          <option key={zone.id} value={zone.id}>
+            {zone.name}
+          </option>
         ))}
       </select>
 
-      <label className="block text-red-800 font-semibold">เลือกพื้นที่:</label>
+      <label className="block text-red-800 font-semibold">เลือกชั้น:</label>
       <select
         className="w-full p-2 border rounded text-black"
         value={selectedFloor}
@@ -64,11 +71,15 @@ export default function Area(): JSX.Element {
       >
         <option value="">-- เลือกชั้น --</option>
         {floors.map((floor) => (
-          <option key={floor.id} value={floor.id}>{floor.name}</option>
+          <option key={floor.id} value={floor.id}>
+            {floor.name}
+          </option>
         ))}
       </select>
 
-      <label className="block text-[#8C181C] font-semibold mt-3">เลือกห้อง:</label>
+      <label className="block text-[#8C181C] font-semibold mt-3">
+        เลือกห้อง:
+      </label>
       <select
         className="w-full p-2 border rounded text-black"
         value={selectedRoom}
@@ -80,11 +91,15 @@ export default function Area(): JSX.Element {
       >
         <option value="">-- เลือกห้อง --</option>
         {rooms.map((room) => (
-          <option key={room.id} value={room.id}>{room.name}</option>
+          <option key={room.id} value={room.id}>
+            {room.name}
+          </option>
         ))}
       </select>
 
-      <label className="block text-[#8C181C] font-semibold mt-3">เลือกประเภทปัญหา:</label>
+      <label className="block text-[#8C181C] font-semibold mt-3">
+        เลือกประเภทปัญหา:
+      </label>
       <select
         className="w-full p-2 border rounded text-black"
         value={selectedIssue}
@@ -93,9 +108,18 @@ export default function Area(): JSX.Element {
       >
         <option value="">-- เลือกปัญหา --</option>
         {issues.map((issue, index) => (
-          <option key={index} value={issue}>{issue}</option>
+          <option key={index} value={issue}>
+            {issue}
+          </option>
         ))}
       </select>
+
+      <textarea
+        className="w-full p-2 border rounded text-black mt-3 h-32"
+        name="detail"
+        id="detail"
+        placeholder="รายละเอียดของปัญหา"
+      />
     </div>
   );
 }
