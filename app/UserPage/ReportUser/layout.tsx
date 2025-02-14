@@ -1,6 +1,5 @@
 "use client"
 import React from "react";
-import styles from "./styles.module.css";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -25,7 +24,7 @@ export default function AboutLayout({
             />
           </Link>
         </h1>
-        <h1 className="absolute left-1/2 transform -translate-x-1/2 text-center">
+        <h1 className="absolute left-1/2 transform -translate-x-1/2 text-center text-2xl">
           แจ้งปัญหา
         </h1>
       </nav>
