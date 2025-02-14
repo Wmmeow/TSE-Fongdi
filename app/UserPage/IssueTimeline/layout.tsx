@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,10 +9,10 @@ export default function AboutLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="h-screen overflow-hidden">
+    <>
       <nav className="w-full p-5 pt-7 pb-4 md:p-6 lg:p-8 bg-white text-xl text-black flex items-center justify-between font-thai relative">
         <h1 className="flex-grow">
-          <Link href="/">
+          <Link href="/UserPage/ReportUser">
             <Image
               src="https://img.icons8.com/ios/50/000000/back.png"
               alt="Back"
@@ -24,14 +25,14 @@ export default function AboutLayout({
           </Link>
         </h1>
         <h1 className="absolute left-1/2 transform -translate-x-1/2 text-center text-2xl">
-          เข้าสู่ระบบ
+          ประวัติการแจ้ง
         </h1>
       </nav>
       <main
-        className={`bg-[#8c181c] flex items-center justify-center min-h-screen p-4`}
+        className={`bg-[#8c181c] flex items-start justify-center min-h-screen p-4`}
       >
         {children}
       </main>
-    </main>
+    </>
   );
 }
